@@ -8,3 +8,16 @@ Docker上で動作するSvelte フロントエンドアプリ
 * Docker Desktop
 
 ## SvelteKitプロジェクトを作成
+
+```
+npm create svelte@latest svelte-chart-data
+```
+
+### オプションの指定
+- Which Svelt app template? : Skelton
+- Add type checking with TypeScript? : Yes
+- Select additional options. :
+  - Add ESLint for code linting : on
+  - Add Prettier for code formatting : on
+  - Add Playwright for browser testing : on
+  - Add Vitest for unit testing : on
