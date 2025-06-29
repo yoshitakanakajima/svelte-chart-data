@@ -92,7 +92,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # 依存関係をインストール
-RUN npm install
+RUN npm install  # 開発環境用：新しく依存パッケージを追加したいとき（lockファイルがなくても実行可）
+# RUN npm ci         # 本番環境用：package-lock.jsonに従って完全に同じ依存環境を再現
 
 # Skeleton Labs 関連をインストール
 RUN npm install -D @skeletonlabs/skeleton @skeletonlabs/tw-plugin
@@ -111,5 +112,7 @@ RUN npm run build
 EXPOSE 3000
 
 # アプリ実行
-CMD ["npm", "run", "preview"]
+# CMD ["npm", "run", "preview"]
+# CMD ["node", "./build"]
+CMD ["npm", "run", "dev", "--", "--host"]
 ```
