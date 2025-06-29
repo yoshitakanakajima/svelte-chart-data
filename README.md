@@ -30,7 +30,7 @@ npm install
 ### パッケージ構成
 
 ```
-my-project/
+svelte-chart-data/
 ├ src/
 │ ├ lib/
 │ │ ├ server/
@@ -49,7 +49,10 @@ my-project/
 │ └ [your static assets]
 ├ tests/
 │ └ [your tests]
+├ docker-compose.yml
+├ Dockerfile
 ├ package.json
+├ package-lock.json
 ├ svelte.config.js
 ├ tsconfig.json
 └ vite.config.js
@@ -72,3 +75,41 @@ npm install
 npm install @sveltejs/adapter-node -D
 ```
 
+```svelte.config.js
+-import adapter from '@sveltejs/adapter-auto';
++import adapter from '@sveltejs/adapter-node';
+```
+
+### Dockerfileの作成
+
+```Dockerfile
+FROM node:20-alpine
+
+# 作業ディレクトリ作成
+WORKDIR /app
+
+# package.jsonとpackage-lock.jsonをコピー（キャッシュを効かせるため）
+COPY package*.json ./
+
+# 依存関係をインストール
+RUN npm install
+
+# Skeleton Labs 関連をインストール
+RUN npm install -D @skeletonlabs/skeleton @skeletonlabs/tw-plugin
+
+# TailwindCSS を手動で追加（対話なし）
+RUN npm install -D tailwindcss postcss autoprefixer \
+    && npx tailwindcss init tailwind.config.cjs -p
+
+# 残りのソースコードをコピー
+COPY . .
+
+# ビルド
+RUN npm run build
+
+# ポート指定（任意）
+EXPOSE 3000
+
+# アプリ実行
+CMD ["npm", "run", "preview"]
+```
