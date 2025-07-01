@@ -49,8 +49,10 @@ svelte-chart-data/
 │ └ [your static assets]
 ├ tests/
 │ └ [your tests]
+├ docker/
+│ └ front
+│   └ Dockerfile
 ├ docker-compose.yml
-├ Dockerfile
 ├ package.json
 ├ package-lock.json
 ├ svelte.config.js
@@ -115,4 +117,28 @@ EXPOSE 3000
 # CMD ["npm", "run", "preview"]
 # CMD ["node", "./build"]
 CMD ["npm", "run", "dev", "--", "--host"]
+```
+
+### docker-compose.ymlの作成
+
+```docker-compose.yml
+version: '3.8'
+
+services:
+  frontend:
+    image: svelte-chart-datap
+    build:
+      context: .
+      dockerfile: docker/front/Dockerfile
+    environment:
+      - NODE_ENV=development
+      - PORT=5173
+    ports:
+      - 5173:5173
+    volumes:
+      - ./src:/app/src
+      - ./static:/app/static
+      - ./vite.config.js:/app/vite.config.js
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./svelte.config.js:/app/svelte.config.js
 ```
